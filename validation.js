@@ -1,6 +1,21 @@
 const validationState = new Set();
 const loginForm = document.getElementsByClassName('form-1')[0];
 
+function manipulateValidationMsg(validationData) {
+    const { inputProps, action } = validationData;
+    const elementValidationMsg = inputProps.nextElementSibling;
+    const validationMsgClasses = elementValidationMsg.classList;
+    const removeClass = () => {
+        validationMsgClasses.remove('hide');
+    };
+
+    const addClass = () => {
+        validationMsgClasses.add('hide');
+    };
+
+    return action === 'addClass' ? addClass() : removeClass();
+}
+
 
 function validationRules() {
     return {
@@ -11,8 +26,9 @@ function validationRules() {
             const isInputValid = usernameValidationRule.test(inputValue);
 
             if(isInputValid) {
-
-                manageState().removeFromState(inputName);
+                manageState().removeFromState({inputProps, inputName});
+            } else {
+                manageState().addToState({inputProps, inputName});
             }
         },
 
@@ -34,11 +50,17 @@ function validateForm(inputProps) {
 
 function manageState() {
     return {
-        addToState: () => {
-
+        addToState: (inputData) => {
+            const action = 'removeClass';
+            const { inputProps, inputName } = inputData;
+            validationState.add(inputName);
+            manipulateValidationMsg({ inputProps, action });
         },
-        removeFromState: () => {
-
+        removeFromState: (inputData) => {
+            const action = 'addClass';
+            const { inputProps, inputName } = inputData;
+            validationState.delete(inputName);
+            manipulateValidationMsg({ inputProps, action})
         },
         validateState: () => {
 
@@ -66,7 +88,7 @@ function submitForm() {
 }
 
 function init() {
-    attachChangeEvent();
+    attachKeyUpEvent();
 }
 
 document.addEventListener('DOMContentLoaded', init);
