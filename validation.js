@@ -25,15 +25,20 @@ function validationRules() {
             const inputName = inputProps.name;
             const isInputValid = usernameValidationRule.test(inputValue);
 
-            if(isInputValid) {
-                manageState().removeFromState({inputProps, inputName});
-            } else {
-                manageState().addToState({inputProps, inputName});
-            }
+            isInputValid ? manageState().removeFromState({inputProps, inputName}) : manageState().addToState({inputProps, inputName});
+
+            return true;
         },
 
         password: (inputProps) => {
+            const passwordValidationRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,10}$/g;
+            const inputValue = inputProps.value;
+            const inputName = inputProps.name;
+            const isInputValid = passwordValidationRule.test(inputValue);
 
+            isInputValid ? manageState().removeFromState({inputProps, inputName}) : manageState().addToState({inputProps, inputName});
+
+            return true;
         }
     }
 }
