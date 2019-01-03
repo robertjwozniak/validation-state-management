@@ -43,7 +43,14 @@ function validationRules() {
 
         emptyFields: () => {
             const formInputElems = [...loginForm.elements].filter(item => item.nodeName === 'INPUT');
-
+            for(const inputProps of formInputElems) {
+                const inputName = inputProps.name;
+                const inputValue = inputProps.value;
+                
+                if(!inputValue) {
+                    manageState().addToState({inputProps, inputName});
+                } 
+            }
         }
     }
 }
@@ -80,7 +87,8 @@ function manageState() {
             }
 
             if(validationState.size === 0) {
-
+                validationRules().emptyFields();
+                return true;
             }
         }
     }
@@ -100,13 +108,15 @@ function attachKeyUpEvent() {
 // The function submits the form
 function submitForm() {
     const submitButton = document.getElementsByClassName('js-submit-user')[0];
-    submitButton.addEventListener('click', function() {
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault();
         manageState().validateState();
     });
 }
 
 function init() {
     attachKeyUpEvent();
+    submitForm();
 }
 
 document.addEventListener('DOMContentLoaded', init);
