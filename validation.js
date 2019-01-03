@@ -1,6 +1,8 @@
 const validationState = new Set();
 const loginForm = document.forms[0];
 
+
+// Function manipulates validation messages by toggling them
 function manipulateValidationMsg(validationData) {
     const { inputProps, action } = validationData;
     const elementValidationMsg = inputProps.nextElementSibling;
@@ -17,6 +19,7 @@ function manipulateValidationMsg(validationData) {
 }
 
 
+// Validation rules for each field in our form.
 function validationRules() {
     return {
         username: (inputProps) => {
@@ -46,7 +49,7 @@ function validationRules() {
             for(const inputProps of formInputElems) {
                 const inputName = inputProps.name;
                 const inputValue = inputProps.value;
-                
+
                 if(!inputValue) {
                     manageState().addToState({inputProps, inputName});
                 } 
@@ -55,6 +58,7 @@ function validationRules() {
     }
 }
 
+// Function receives an input with its properties
 function validateForm(inputProps) {
     const inputName = inputProps.name;
     const verifyInputName = {
@@ -65,6 +69,7 @@ function validateForm(inputProps) {
     return verifyInputName[inputName](inputProps)
 }
 
+// Collection of functions for managing state
 function manageState() {
     return {
         addToState: (inputData) => {
@@ -94,6 +99,9 @@ function manageState() {
     }
 };
 
+
+// Attaching 'keyup' event to the login form. 
+// Using event delegation
 function attachKeyUpEvent() {
     loginForm.addEventListener('keyup', function(event) {
         const nodeName = event.target.nodeName;
