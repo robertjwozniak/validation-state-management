@@ -1,5 +1,5 @@
 const validationState = new Set();
-const loginForm = document.getElementsByClassName('form-1')[0];
+const loginForm = document.forms[0];
 
 function manipulateValidationMsg(validationData) {
     const { inputProps, action } = validationData;
@@ -39,6 +39,11 @@ function validationRules() {
             isInputValid ? manageState().removeFromState({inputProps, inputName}) : manageState().addToState({inputProps, inputName});
 
             return true;
+        },
+
+        emptyFields: () => {
+            const formInputElems = [...loginForm.elements].filter(item => item.nodeName === 'INPUT');
+
         }
     }
 }
@@ -58,17 +63,25 @@ function manageState() {
         addToState: (inputData) => {
             const action = 'removeClass';
             const { inputProps, inputName } = inputData;
+
             validationState.add(inputName);
             manipulateValidationMsg({ inputProps, action });
         },
         removeFromState: (inputData) => {
             const action = 'addClass';
             const { inputProps, inputName } = inputData;
+
             validationState.delete(inputName);
             manipulateValidationMsg({ inputProps, action})
         },
         validateState: () => {
+            if(validationState.size > 0) {
+                return false;
+            }
 
+            if(validationState.size === 0) {
+
+            }
         }
     }
 };
