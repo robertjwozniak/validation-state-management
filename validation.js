@@ -15,7 +15,7 @@ function manipulateValidationMsg(validationData) {
         validationMsgClasses.add('hide');
     };
 
-    return action === 'addClass' ? addClass() : removeClass();
+    return action === 'hide' ? addClass() : removeClass();
 }
 
 
@@ -73,14 +73,13 @@ function validateForm(inputProps) {
 function manageState() {
     return {
         addToState: (inputData) => {
-            const action = 'removeClass';
             const { inputProps, inputName } = inputData;
 
             validationState.add(inputName);
-            manipulateValidationMsg({ inputProps, action });
+            manipulateValidationMsg({ inputProps });
         },
         removeFromState: (inputData) => {
-            const action = 'addClass';
+            const action = 'hide';
             const { inputProps, inputName } = inputData;
 
             validationState.delete(inputName);
